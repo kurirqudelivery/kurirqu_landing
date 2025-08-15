@@ -20,7 +20,9 @@ export function Footer() {
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <MapPin className="h-5 w-5 text-[#af1b1c]" />
-                <span className="text-gray-300">Jl. Merdeka No. 123, Jakarta Pusat</span>
+                <span className="text-gray-300">
+                  Jl. Griya Jati Permai, Sukorejo, Kec. Sukorejo, Kota Blitar, Jawa Timur 66121
+                </span>
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="h-5 w-5 text-[#af1b1c]" />
@@ -28,7 +30,7 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="h-5 w-5 text-[#af1b1c]" />
-                <span className="text-gray-300">+62 812-3456-7890</span>
+                <span className="text-gray-300">+62 822-3641-8724</span>
               </div>
             </div>
           </div>
@@ -96,7 +98,7 @@ export function Footer() {
             </a>
           </div>
 
-          <p className="text-gray-400 text-center md:text-right">© 2024 KurirQu. Semua hak dilindungi.</p>
+          <p className="text-gray-400 text-center md:text-right">© 2025 KurirQu. Semua hak dilindungi.</p>
         </div>
       </div>
     </footer>

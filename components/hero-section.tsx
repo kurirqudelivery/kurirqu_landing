@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { ArrowRight, MessageCircle } from "lucide-react"
+import { ArrowRight, Phone } from "lucide-react"
 import Image from "next/image"
 
 export function HeroSection() {
@@ -41,36 +41,37 @@ export function HeroSection() {
             <Button
               size="lg"
               className="bg-gradient-to-r from-[#6c1618] to-[#af1b1c] hover:from-[#5a1315] hover:to-[#9a1719] text-white rounded-full px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+              onClick={() => window.open("https://wa.link/dvsne2", "_blank")}
             >
-              <MessageCircle className="mr-2 h-5 w-5" />
+              <Phone className="mr-2 h-5 w-5" />
               Pesan Sekarang
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </div>
 
           {/* Instructions */}
-          <div className="bg-gray-50 rounded-2xl p-6 max-w-2xl mx-auto shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group cursor-pointer">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Cara Mudah Pesan:</h3>
+          <div className="bg-gray-50 rounded-2xl p-6 max-w-4xl mx-auto shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group cursor-pointer">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Proses Pemesanan Sederhana:</h3>
             <div className="flex flex-col md:flex-row items-center justify-center gap-4 text-gray-700">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-gradient-to-r from-[#6c1618] to-[#af1b1c] rounded-full flex items-center justify-center text-white font-bold text-sm group-hover:scale-110 transition-transform duration-300">
                   1
                 </div>
-                <span>Chat via WhatsApp</span>
+                <span>Hubungi via WhatsApp</span>
               </div>
               <ArrowRight className="h-4 w-4 text-gray-400 rotate-90 md:rotate-0" />
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-gradient-to-r from-[#6c1618] to-[#af1b1c] rounded-full flex items-center justify-center text-white font-bold text-sm group-hover:scale-110 transition-transform duration-300">
                   2
                 </div>
-                <span>Order Makanan, Barang, dll</span>
+                <span>Sampaikan Detail Pesanan</span>
               </div>
               <ArrowRight className="h-4 w-4 text-gray-400 rotate-90 md:rotate-0" />
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-gradient-to-r from-[#6c1618] to-[#af1b1c] rounded-full flex items-center justify-center text-white font-bold text-sm group-hover:scale-110 transition-transform duration-300">
                   3
                 </div>
-                <span>Selesai</span>
+                <span>Pesanan Diproses</span>
               </div>
             </div>
           </div>
