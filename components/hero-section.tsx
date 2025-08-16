@@ -22,8 +22,8 @@ export function HeroSection() {
                 <Image
                   src="https://kurirqu-landing.vercel.app/assets/img/logo/kurirqu-logo.png"
                   alt="KurirQu Logo"
-                  width={100}
-                  height={100}
+                  width={150}
+                  height={150}
                   className="transition-transform duration-300 group-hover:scale-105 drop-shadow-lg"
                 />
               </div>
