@@ -4,10 +4,14 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Shield, Eye, Lock, Database, UserCheck } from "lucide-react"
 import Link from "next/link"
+import { Navbar } from "@/components/navbar"
 
 export default function KebijakanPrivasiClient() {
   return (
     <div className="min-h-screen bg-white">
+      {/* Navbar */}
+      <Navbar />
+
       {/* Header */}
       <div className="bg-gradient-to-r from-[#6c1618] to-[#af1b1c] text-white py-16">
         <div className="container mx-auto px-4">

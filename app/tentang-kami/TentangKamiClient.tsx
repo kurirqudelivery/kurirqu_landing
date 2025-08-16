@@ -13,6 +13,7 @@ import {
   ArrowLeft,
 } from "lucide-react"
 import Link from "next/link"
+import { Navbar } from "@/components/navbar"
 
 export default function TentangKamiClient() {
   const services = [
@@ -52,10 +53,12 @@ export default function TentangKamiClient() {
 
   return (
     <div className="min-h-screen bg-white">
+      <Navbar />
+
       {/* Header */}
       <div className="bg-gradient-to-r from-[#6c1618] to-[#af1b1c] text-white py-20">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-4xl mx-auto text-left">
             <Link
               href="/"
               className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-6 transition-colors"
