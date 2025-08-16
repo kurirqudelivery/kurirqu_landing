@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { MapPin, Mail, Phone, Facebook, Instagram, Twitter } from "lucide-react"
+import Link from "next/link"
 
 export function Footer() {
   return (
@@ -40,14 +41,14 @@ export function Footer() {
             <h4 className="text-lg font-semibold mb-4">Navigasi</h4>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-gray-300 hover:text-white transition-colors">
+                <a href="/" className="text-gray-300 hover:text-white transition-colors">
                   Home
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/tentang-kami" className="text-gray-300 hover:text-white transition-colors">
                   Tentang Kami
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="#" className="text-gray-300 hover:text-white transition-colors">
@@ -55,14 +56,14 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/syarat-ketentuan" className="text-gray-300 hover:text-white transition-colors">
                   Syarat & Ketentuan
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/kebijakan-privasi" className="text-gray-300 hover:text-white transition-colors">
                   Kebijakan Privasi
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
