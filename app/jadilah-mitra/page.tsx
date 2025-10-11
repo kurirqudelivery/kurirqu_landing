@@ -321,61 +321,159 @@ export default function PartnershipApplicationPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 py-4 sm:py-8">
       <div className="container mx-auto px-4 max-w-4xl">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
             {settings.partnershipButtonText}
           </h1>
           {settings.partnershipDescription && (
-            <p className="text-lg text-gray-600 mb-6">{settings.partnershipDescription}</p>
+            <p className="text-sm sm:text-base lg:text-lg text-gray-600 mb-4 sm:mb-6">{settings.partnershipDescription}</p>
           )}
           
-          {/* Progress Steps */}
-          <div className="flex justify-center mb-8">
-            <div className="flex items-center space-x-4">
-              {steps.map((step, index) => {
-                const Icon = step.icon
-                const isActive = currentStep === step.id
-                const isCompleted = currentStep > step.id
+          {/* Progress Steps - Enhanced Mobile Friendly */}
+          <div className="mb-6 sm:mb-8">
+            {/* Mobile: Enhanced Vertical Progress with Numbers */}
+            <div className="block sm:hidden">
+              <div className="relative">
+                {/* Progress Line */}
+                <div className="absolute left-4 top-8 bottom-8 w-0.5 bg-gray-200">
+                  <div 
+                    className="w-full bg-gradient-to-b from-red-600 to-red-400 transition-all duration-500 ease-out"
+                    style={{ height: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
+                  />
+                </div>
                 
-                return (
-                  <div key={step.id} className="flex items-center">
-                    <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${
-                      isActive 
-                        ? 'border-red-600 bg-red-600 text-white' 
-                        : isCompleted 
-                          ? 'border-green-600 bg-green-600 text-white'
-                          : 'border-gray-300 bg-white text-gray-500'
-                    }`}>
-                      <Icon className="h-5 w-5" />
+                {/* Steps */}
+                <div className="space-y-4">
+                  {steps.map((step, index) => {
+                    const Icon = step.icon
+                    const isActive = currentStep === step.id
+                    const isCompleted = currentStep > step.id
+                    const isUpcoming = currentStep < step.id
+                    
+                    return (
+                      <div key={step.id} className="relative flex items-center">
+                        {/* Step Circle with Animation */}
+                        <div className="relative z-10">
+                          <div className={`flex items-center justify-center w-8 h-8 rounded-full border-2 transition-all duration-300 transform ${
+                            isActive 
+                              ? 'border-red-600 bg-red-600 text-white scale-110 shadow-lg shadow-red-200' 
+                              : isCompleted 
+                                ? 'border-green-600 bg-green-600 text-white scale-105 shadow-md shadow-green-200'
+                                : isUpcoming
+                                  ? 'border-gray-300 bg-white text-gray-400 scale-100'
+                                  : 'border-gray-300 bg-white text-gray-500 scale-100'
+                          }`}>
+                            {isCompleted ? (
+                              <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                              </svg>
+                            ) : (
+                              <span className="text-xs font-bold">{step.id}</span>
+                            )}
+                          </div>
+                        </div>
+                        
+                        {/* Step Content */}
+                        <div className="ml-4 flex-1">
+                          <div className={`p-3 rounded-lg transition-all duration-300 ${
+                            isActive 
+                              ? 'bg-red-50 border border-red-200 shadow-sm' 
+                              : isCompleted 
+                                ? 'bg-green-50 border border-green-200 shadow-sm'
+                                : 'bg-white border border-gray-200'
+                          }`}>
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className={`text-sm font-semibold ${
+                                  isActive 
+                                    ? 'text-red-700' 
+                                    : isCompleted 
+                                      ? 'text-green-700'
+                                      : 'text-gray-500'
+                                }`}>
+                                  {step.title}
+                                </p>
+                                <p className={`text-xs mt-1 ${
+                                  isActive 
+                                    ? 'text-red-600' 
+                                    : isCompleted 
+                                      ? 'text-green-600'
+                                      : 'text-gray-400'
+                                }`}>
+                                  {isActive ? 'Langkah ini' : isCompleted ? 'Selesai' : 'Menunggu'}
+                                </p>
+                              </div>
+                              <Icon className={`h-5 w-5 ${
+                                isActive 
+                                  ? 'text-red-600' 
+                                  : isCompleted 
+                                    ? 'text-green-600'
+                                    : 'text-gray-400'
+                              }`} />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+            
+            {/* Desktop: Horizontal Progress */}
+            <div className="hidden sm:flex justify-center">
+              <div className="flex items-center space-x-2 sm:space-x-4">
+                {steps.map((step, index) => {
+                  const Icon = step.icon
+                  const isActive = currentStep === step.id
+                  const isCompleted = currentStep > step.id
+                  
+                  return (
+                    <div key={step.id} className="flex items-center">
+                      <div className={`flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 transition-all duration-300 ${
+                        isActive 
+                          ? 'border-red-600 bg-red-600 text-white scale-110 shadow-lg shadow-red-200' 
+                          : isCompleted 
+                            ? 'border-green-600 bg-green-600 text-white scale-105 shadow-md shadow-green-200'
+                            : 'border-gray-300 bg-white text-gray-500 scale-100'
+                      }`}>
+                        {isCompleted ? (
+                          <svg className="h-4 w-4 sm:h-5 sm:w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                          </svg>
+                        ) : (
+                          <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
+                        )}
+                      </div>
+                      <span className={`ml-1 sm:ml-2 text-xs sm:text-sm font-medium transition-colors duration-300 ${
+                        isActive ? 'text-red-600' : isCompleted ? 'text-green-600' : 'text-gray-500'
+                      }`}>
+                        {step.title}
+                      </span>
+                      {index < steps.length - 1 && (
+                        <div className={`w-4 sm:w-8 h-0.5 mx-1 sm:mx-4 transition-all duration-500 ${
+                          isCompleted ? 'bg-green-600' : 'bg-gray-300'
+                        }`} />
+                      )}
                     </div>
-                    <span className={`ml-2 text-sm font-medium ${
-                      isActive ? 'text-red-600' : isCompleted ? 'text-green-600' : 'text-gray-500'
-                    }`}>
-                      {step.title}
-                    </span>
-                    {index < steps.length - 1 && (
-                      <div className={`w-8 h-0.5 mx-4 ${
-                        isCompleted ? 'bg-green-600' : 'bg-gray-300'
-                      }`} />
-                    )}
-                  </div>
-                )
-              })}
+                  )
+                })}
+              </div>
             </div>
           </div>
         </div>
 
         {/* Form */}
-        <Card>
-          <CardContent className="p-8">
+        <Card className="shadow-sm">
+          <CardContent className="p-4 sm:p-6 lg:p-8">
             {/* Step 1: Data Pribadi */}
             {currentStep === 1 && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-semibold mb-6">Data Pribadi</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4 sm:space-y-6">
+                <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">Data Pribadi</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div>
                     <Label htmlFor="email">Email Aktif *</Label>
                     <Input
@@ -431,11 +529,11 @@ export default function PartnershipApplicationPage() {
                       <p className="text-red-500 text-sm mt-1">Tanggal lahir harus diisi</p>
                     )}
                   </div>
-                  <div className="md:col-span-2">
+                  <div className="sm:col-span-2">
                     <Label htmlFor="alamatRumah">Alamat Rumah *</Label>
                     <textarea
                       id="alamatRumah"
-                      className={`w-full min-h-[100px] px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent ${validationErrors.alamatRumah ? "border-red-300 focus:border-red-500" : "border-gray-300"}`}
+                      className={`w-full min-h-[80px] sm:min-h-[100px] px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent ${validationErrors.alamatRumah ? "border-red-300 focus:border-red-500" : "border-gray-300"}`}
                       value={formData.alamatRumah}
                       onChange={(e) => handleInputChange('alamatRumah', e.target.value)}
                       placeholder="Jl. Example No. 123, Jakarta"
@@ -476,9 +574,9 @@ export default function PartnershipApplicationPage() {
 
             {/* Step 2: Data Kendaraan */}
             {currentStep === 2 && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-semibold mb-6">Data Kendaraan</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4 sm:space-y-6">
+                <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">Data Kendaraan</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div>
                     <Label htmlFor="jenisKendaraan">Jenis Kendaraan *</Label>
                     <Select value={formData.jenisKendaraan} onValueChange={(value) => handleInputChange('jenisKendaraan', value)}>
@@ -534,9 +632,9 @@ export default function PartnershipApplicationPage() {
                       <p className="text-red-500 text-sm mt-1">Tahun kendaraan harus diisi</p>
                     )}
                   </div>
-                  <div className="md:col-span-2">
+                  <div className="sm:col-span-2">
                     <Label htmlFor="fotoSTNK">Foto STNK *</Label>
-                    <div className={`border-2 border-dashed rounded-lg p-6 text-center ${validationErrors.fotoSTNK ? "border-red-300 bg-red-50" : "border-gray-300"}`}>
+                    <div className={`border-2 border-dashed rounded-lg p-4 sm:p-6 text-center ${validationErrors.fotoSTNK ? "border-red-300 bg-red-50" : "border-gray-300"}`}>
                       <input
                         type="file"
                         id="fotoSTNK"
@@ -551,8 +649,8 @@ export default function PartnershipApplicationPage() {
                           </div>
                         ) : (
                           <div>
-                            <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                            <p className="text-sm text-gray-600">Click to upload STNK image</p>
+                            <Upload className="h-10 w-10 sm:h-12 sm:w-12 text-gray-400 mx-auto mb-2 sm:mb-4" />
+                            <p className="text-xs sm:text-sm text-gray-600">Click to upload STNK image</p>
                             <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                           </div>
                         )}
@@ -568,12 +666,12 @@ export default function PartnershipApplicationPage() {
 
             {/* Step 3: Dokumen Pendukung */}
             {currentStep === 3 && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-semibold mb-6">Dokumen Pendukung</h2>
-                <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
+                <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">Dokumen Pendukung</h2>
+                <div className="space-y-4 sm:space-y-6">
                   <div>
                     <Label htmlFor="fotoKTP">Foto KTP *</Label>
-                    <div className={`border-2 border-dashed rounded-lg p-6 text-center ${validationErrors.fotoKTP ? "border-red-300 bg-red-50" : "border-gray-300"}`}>
+                    <div className={`border-2 border-dashed rounded-lg p-4 sm:p-6 text-center ${validationErrors.fotoKTP ? "border-red-300 bg-red-50" : "border-gray-300"}`}>
                       <input
                         type="file"
                         id="fotoKTP"
@@ -588,8 +686,8 @@ export default function PartnershipApplicationPage() {
                           </div>
                         ) : (
                           <div>
-                            <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                            <p className="text-sm text-gray-600">Click to upload KTP image</p>
+                            <Upload className="h-10 w-10 sm:h-12 sm:w-12 text-gray-400 mx-auto mb-2 sm:mb-4" />
+                            <p className="text-xs sm:text-sm text-gray-600">Click to upload KTP image</p>
                             <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                           </div>
                         )}
@@ -602,7 +700,7 @@ export default function PartnershipApplicationPage() {
 
                   <div>
                     <Label htmlFor="fotoSIM">Foto SIM *</Label>
-                    <div className={`border-2 border-dashed rounded-lg p-6 text-center ${validationErrors.fotoSIM ? "border-red-300 bg-red-50" : "border-gray-300"}`}>
+                    <div className={`border-2 border-dashed rounded-lg p-4 sm:p-6 text-center ${validationErrors.fotoSIM ? "border-red-300 bg-red-50" : "border-gray-300"}`}>
                       <input
                         type="file"
                         id="fotoSIM"
@@ -617,8 +715,8 @@ export default function PartnershipApplicationPage() {
                           </div>
                         ) : (
                           <div>
-                            <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                            <p className="text-sm text-gray-600">Click to upload SIM image</p>
+                            <Upload className="h-10 w-10 sm:h-12 sm:w-12 text-gray-400 mx-auto mb-2 sm:mb-4" />
+                            <p className="text-xs sm:text-sm text-gray-600">Click to upload SIM image</p>
                             <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                           </div>
                         )}
@@ -631,7 +729,7 @@ export default function PartnershipApplicationPage() {
 
                   <div>
                     <Label htmlFor="fotoSelfie">Foto Selfi *</Label>
-                    <div className={`border-2 border-dashed rounded-lg p-6 text-center ${validationErrors.fotoSelfie ? "border-red-300 bg-red-50" : "border-gray-300"}`}>
+                    <div className={`border-2 border-dashed rounded-lg p-4 sm:p-6 text-center ${validationErrors.fotoSelfie ? "border-red-300 bg-red-50" : "border-gray-300"}`}>
                       <input
                         type="file"
                         id="fotoSelfie"
@@ -646,8 +744,8 @@ export default function PartnershipApplicationPage() {
                           </div>
                         ) : (
                           <div>
-                            <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                            <p className="text-sm text-gray-600">Click to upload selfie photo</p>
+                            <Upload className="h-10 w-10 sm:h-12 sm:w-12 text-gray-400 mx-auto mb-2 sm:mb-4" />
+                            <p className="text-xs sm:text-sm text-gray-600">Click to upload selfie photo</p>
                             <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                           </div>
                         )}
@@ -663,12 +761,12 @@ export default function PartnershipApplicationPage() {
 
             {/* Step 4: Informasi Tambahan */}
             {currentStep === 4 && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-semibold mb-6">Informasi Tambahan</h2>
-                <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
+                <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">Informasi Tambahan</h2>
+                <div className="space-y-4 sm:space-y-6">
                   <div>
                     <Label>Pernah menjadi Kurir sebelumnya? *</Label>
-                    <div className="flex space-x-4 mt-2">
+                    <div className="flex flex-col sm:flex-row sm:space-x-4 sm:mt-2 space-y-2 sm:space-y-0">
                       <label className="flex items-center">
                         <input
                           type="radio"
@@ -689,11 +787,11 @@ export default function PartnershipApplicationPage() {
                       </label>
                     </div>
                     {formData.pernahJadiKurir && (
-                      <div className="mt-4">
+                      <div className="mt-3 sm:mt-4">
                         <Label htmlFor="pengalamanKurir">Jelaskan pengalaman Anda</Label>
                         <textarea
                           id="pengalamanKurir"
-                          className="w-full min-h-[100px] px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent mt-2"
+                          className="w-full min-h-[80px] sm:min-h-[100px] px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent mt-2"
                           value={formData.pengalamanKurir}
                           onChange={(e) => handleInputChange('pengalamanKurir', e.target.value)}
                           placeholder="Jelaskan pengalaman Anda sebagai kurir..."
@@ -704,7 +802,7 @@ export default function PartnershipApplicationPage() {
 
                   <div>
                     <Label>Waktu kerja (pilih semua yang sesuai) *</Label>
-                    <div className="grid grid-cols-3 gap-4 mt-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mt-2">
                       {['Pagi', 'Siang', 'Malam'].map((waktu) => (
                         <label key={waktu} className="flex items-center">
                           <Checkbox
@@ -766,8 +864,8 @@ export default function PartnershipApplicationPage() {
 
             {/* Step 5: Persetujuan */}
             {currentStep === 5 && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-semibold mb-6">Persetujuan</h2>
+              <div className="space-y-4 sm:space-y-6">
+                <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">Persetujuan</h2>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-3">
                     <Checkbox
@@ -798,9 +896,9 @@ export default function PartnershipApplicationPage() {
                   )}
                 </div>
 
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-                  <h3 className="font-semibold text-blue-900 mb-2">Ringkasan Data Anda:</h3>
-                  <div className="text-sm text-blue-800 space-y-1">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4 mt-4 sm:mt-6">
+                  <h3 className="font-semibold text-blue-900 mb-2 text-sm sm:text-base">Ringkasan Data Anda:</h3>
+                  <div className="text-xs sm:text-sm text-blue-800 space-y-1">
                     <p><strong>Nama:</strong> {formData.nama}</p>
                     <p><strong>Email:</strong> {formData.email}</p>
                     <p><strong>No. HP:</strong> {formData.nomorHp}</p>
@@ -812,24 +910,25 @@ export default function PartnershipApplicationPage() {
             )}
 
             {/* Navigation Buttons */}
-            <div className="flex justify-between mt-8">
+            <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-4 mt-6 sm:mt-8">
               <Button
                 variant="outline"
                 onClick={prevStep}
                 disabled={currentStep === 1}
+                className="w-full sm:w-auto order-2 sm:order-1"
               >
                 Previous
               </Button>
 
               {currentStep < 5 ? (
-                <Button onClick={nextStep} className="bg-red-600 hover:bg-red-700">
+                <Button onClick={nextStep} className="bg-red-600 hover:bg-red-700 w-full sm:w-auto order-1 sm:order-2">
                   Next
                 </Button>
               ) : (
                 <Button 
                   onClick={handleSubmit} 
                   disabled={submitting}
-                  className="bg-red-600 hover:bg-red-700"
+                  className="bg-red-600 hover:bg-red-700 w-full sm:w-auto order-1 sm:order-2"
                 >
                   {submitting ? (
                     <>

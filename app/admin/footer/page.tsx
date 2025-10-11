@@ -161,7 +161,7 @@ export default function FooterManagement() {
                   type="email"
                   value={footerData.email}
                   onChange={(e) => updateField('email', e.target.value)}
-                  placeholder="e.g., info@kurirqu.com"
+                  placeholder="e.g., kurirqublitar@gmail.com"
                 />
               </div>
             </div>
@@ -189,7 +189,7 @@ export default function FooterManagement() {
                 id="phone"
                 value={footerData.phone}
                 onChange={(e) => updateField('phone', e.target.value)}
-                placeholder="e.g., +62 812-3456-7890"
+                  placeholder="e.g., +6282236418724"
               />
             </div>
           </CardContent>

@@ -120,8 +120,8 @@ async function initializeAdmin() {
       companyName: 'KurirQu',
       description: 'Layanan pengiriman terpercaya dan professional di Indonesia',
       address: 'Jl. Contoh No. 123, Jakarta Selatan',
-      phone: '+62 812-3456-7890',
-      email: 'info@kurirqu.com',
+      phone: '+6282236418724',
+      email: 'kurirqublitar@gmail.com',
       socialLinks: {
         facebook: 'https://facebook.com/kurirqu',
         instagram: 'https://instagram.com/kurirqu',

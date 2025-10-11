@@ -285,8 +285,8 @@ class EmailService {
             <h4>📞 Butuh Bantuan?</h4>
             <p>Jika Anda memiliki pertanyaan, jangan ragu untuk menghubungi kami:</p>
             <p>
-              📧 Email: support@kurirqu.com<br>
-              📞 WhatsApp: +62 812-3456-7890
+              📧 Email: kurirqublitar@gmail.com<br>
+              📞 WhatsApp: +6282236418724
             </p>
           </div>
           
@@ -410,8 +410,8 @@ class EmailService {
             <h4>📞 Butuh Bantuan?</h4>
             <p>Jika Anda memiliki pertanyaan, jangan ragu untuk menghubungi kami:</p>
             <p>
-              📧 Email: support@kurirqu.com<br>
-              📞 WhatsApp: +62 812-3456-7890
+              📧 Email: kurirqublitar@gmail.com<br>
+              📞 WhatsApp: +6282236418724
             </p>
           </div>
           

@@ -591,7 +591,7 @@ export default function SettingsManagement() {
                       id="contact-phone"
                       value={settings.contact.phone}
                       onChange={(e) => updateNestedField('contact', 'phone', e.target.value)}
-                      placeholder="+62 812-3456-7890"
+                      placeholder="+6282236418724"
                     />
                   </div>
                 </div>

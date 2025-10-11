@@ -181,8 +181,8 @@ const templates: Record<string, any> = {
       name: "KurirQu",
       description: "Solusi pengiriman terpercaya untuk kebutuhan bisnis dan personal Anda. Cepat, aman, dan terjangkau.",
       address: "Jl. Sudirman No. 123, Jakarta Pusat, DKI Jakarta 10110",
-      phone: "+62 21 1234 5678",
-      email: "info@kurirqu.com"
+      phone: "+6282236418724",
+      email: "kurirqublitar@gmail.com"
     },
     quickLinks: [
       { name: "Tentang Kami", href: "/tentang-kami" },
@@ -296,8 +296,8 @@ KurirQu berhak mengubah syarat dan ketentuan sewaktu-waktu dengan pemberitahuan 
 
 ## 12. Kontak
 Untuk pertanyaan lebih lanjut, hubungi:
-Email: info@kurirqu.com
-Phone: +62 21 1234 5678
+Email: kurirqublitar@gmail.com
+Phone: +6282236418724
     `,
     lastUpdated: new Date().toISOString()
   },
@@ -367,8 +367,8 @@ Kebijakan privasi dapat diperbarui sewaktu-waktu. Perubahan akan diinformasikan 
 
 ## 11. Kontak Privasi
 Untuk pertanyaan seputar privasi data, hubungi:
-Email: privacy@kurirqu.com
-Phone: +62 21 1234 5678
+Email: kurirqublitar@gmail.com
+Phone: +6282236418724
     `,
     lastUpdated: new Date().toISOString()
   }

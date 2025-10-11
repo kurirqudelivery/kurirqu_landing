@@ -64,8 +64,8 @@ export async function GET() {
         companyName: 'KurirQu',
         description: 'Layanan pengiriman terpercaya dan professional di Indonesia',
         address: 'Jl. Contoh No. 123, Jakarta Selatan',
-        phone: '+62 812-3456-7890',
-        email: 'info@kurirqu.com',
+        phone: '+6282236418724',
+        email: 'kurirqublitar@gmail.com',
         socialLinks: {}
       },
       settings: settings || {
@@ -76,8 +76,8 @@ export async function GET() {
         faviconUrl: '',
         logoUrl: '',
         address: 'Indonesia',
-        phone: '+62 812-3456-7890',
-        email: 'info@kurirqu.com',
+        phone: '+6282236418724',
+        email: 'kurirqublitar@gmail.com',
         whatsapp: 'https://wa.link/dvsne2',
         socialLinks: {
           facebook: 'https://facebook.com/kurirqu',
@@ -93,8 +93,8 @@ export async function GET() {
           ogImage: ''
         },
         contact: {
-          email: 'info@kurirqu.com',
-          phone: '+62 812-3456-7890',
+          email: 'kurirqublitar@gmail.com',
+          phone: '+6282236418724',
           whatsapp: 'https://wa.link/dvsne2',
           address: 'Indonesia',
           workingHours: 'Senin - Sabtu: 08:00 - 20:00'

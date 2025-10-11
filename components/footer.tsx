@@ -26,7 +26,7 @@ export function Footer() {
     description: 'Layanan kurir terpercaya yang siap melayani kebutuhan pengiriman Anda 24/7. Kami berkomitmen memberikan pelayanan terbaik dengan harga terjangkau.',
     address: 'Jl. Griya Jati Permai, Sukorejo, Kec. Sukorejo, Kota Blitar, Jawa Timur 66121',
     phone: '+62 822-3641-8724',
-    email: 'info@kurirqu.com',
+    email: 'kurirqublitar@gmail.com',
     socialLinks: {
       facebook: 'https://facebook.com/kurirqu',
       instagram: 'https://instagram.com/kurirqu',

@@ -94,7 +94,7 @@ export async function GET() {
             title: "9. Hubungi Kami",
             content: [
               "Jika Anda memiliki pertanyaan atau kekhawatiran mengenai kebijakan privasi ini, atau ingin menggunakan hak-hak Anda terkait data pribadi, silakan hubungi kami:",
-              "Email: privacy@kurirqu.com",
+              "Email: kurirqublitar@gmail.com",
               "WhatsApp: +62 822-3641-8724",
               "Alamat: Jl. Griya Jati Permai, Sukorejo, Kec. Sukorejo, Kota Blitar, Jawa Timur 66121"
             ]
