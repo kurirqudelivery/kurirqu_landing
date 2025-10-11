@@ -133,5 +133,3 @@ Jika mengalami masalah:
 2. Verify environment variables
 3. Test SMTP connection manual
 4. Check MongoDB connection
-
-*
