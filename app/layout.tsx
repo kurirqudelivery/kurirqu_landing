@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import { Inter, Poppins } from "next/font/google"
 import { Analytics } from "@vercel/analytics/react"
 import { Suspense } from "react"
-import "./globals.css"
+import "../styles/globals.css"
 import SiteSettings from "./site-settings"
 
 const inter = Inter({
