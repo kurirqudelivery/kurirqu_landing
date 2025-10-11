@@ -70,6 +70,7 @@ const navigationGroups = [
     items: [
       { name: 'Footer', href: '/admin/footer', icon: FileText },
       { name: 'Global Settings', href: '/admin/settings', icon: Settings },
+      { name: 'Seed Template', href: '/admin/seed-template', icon: Settings },
     ]
   }
 ]

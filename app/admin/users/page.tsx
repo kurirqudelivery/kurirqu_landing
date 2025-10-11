@@ -40,7 +40,7 @@ export default function UsersAdmin() {
       const response = await fetch('/api/admin/users')
       const result = await response.json()
       if (result.success) {
-        setUsers(result.data)
+        setUsers(result.users || [])
       } else {
         setMessage({ type: 'error', text: result.error || 'Gagal memuat data pengguna' })
       }

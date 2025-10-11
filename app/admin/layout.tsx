@@ -1,14 +1,21 @@
+"use client"
+
 import { AdminSessionProvider } from '@/components/admin-session-provider'
+import { AdminAuthWrapper } from '@/components/admin-auth-wrapper'
 import { AdminSidebar } from '@/components/admin-sidebar'
 import { AdminHeader } from '@/components/admin-header'
+import { usePathname } from 'next/navigation'
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+function AdminLayoutContent({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
+  const isLoginPage = pathname === '/admin/login'
+
+  if (isLoginPage) {
+    return <>{children}</>
+  }
+
   return (
-    <AdminSessionProvider>
+    <AdminAuthWrapper>
       <div className="min-h-screen bg-gray-50">
         <AdminSidebar />
         <div className="lg:ml-64">
@@ -20,6 +27,20 @@ export default function AdminLayout({
           </main>
         </div>
       </div>
+    </AdminAuthWrapper>
+  )
+}
+
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <AdminSessionProvider>
+      <AdminLayoutContent>
+        {children}
+      </AdminLayoutContent>
     </AdminSessionProvider>
   )
 }

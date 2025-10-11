@@ -81,14 +81,19 @@ export function OTPLoginForm({ onSuccess }: OTPLoginFormProps) {
         redirect: false,
       })
 
+      console.log('OTP Login Result:', result)
+      
       if (result?.error) {
+        console.log('Login failed:', result.error)
         setMessage('OTP tidak valid atau sudah kadaluarsa')
         setMessageType('error')
       } else {
+        console.log('Login successful, redirecting to admin...')
         setMessage('Login berhasil!')
         setMessageType('success')
         
         setTimeout(() => {
+          console.log('Executing redirect to /admin')
           router.push('/admin')
           router.refresh()
           onSuccess?.()
@@ -144,8 +149,7 @@ export function OTPLoginForm({ onSuccess }: OTPLoginFormProps) {
   return (
     <div className="w-full max-w-md mx-auto space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900">Login Admin</h2>
-        <p className="mt-2 text-sm text-gray-600">
+        <p className="text-sm text-gray-600">
           Masukkan email untuk menerima kode OTP
         </p>
       </div>
