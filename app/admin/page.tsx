@@ -70,9 +70,16 @@ export default function AdminDashboard() {
       }
       let errorMessage = ''
       
-      // Fetch users stats
+      // Create a timeout promise
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Request timeout')), 10000) // 10 second timeout
+      })
+      
+      // Fetch users stats with timeout
       try {
-        const usersResponse = await fetch('/api/admin/users')
+        const usersPromise = fetch('/api/admin/users')
+        const usersResponse = await Promise.race([usersPromise, timeoutPromise]) as Response
+        
         if (usersResponse.ok) {
           const usersData = await usersResponse.json()
           const users = usersData.users || []
@@ -86,9 +93,11 @@ export default function AdminDashboard() {
         errorMessage += 'Error fetching users. '
       }
 
-      // Fetch partners stats
+      // Fetch partners stats with timeout
       try {
-        const partnersResponse = await fetch('/api/admin/partners/stats')
+        const partnersPromise = fetch('/api/admin/partners/stats')
+        const partnersResponse = await Promise.race([partnersPromise, timeoutPromise]) as Response
+        
         if (partnersResponse.ok) {
           const data = await partnersResponse.json()
           partnersStats = data.stats || partnersStats
@@ -130,6 +139,24 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error('Error fetching dashboard stats:', error)
       setMessage('❌ Error loading dashboard statistics. Please try refreshing the page.')
+      
+      // Set default stats on error to prevent infinite loading
+      setDashboardStats({
+        totalUsers: 0,
+        activeUsers: 0,
+        totalPartners: 0,
+        pendingPartners: 0,
+        approvedPartners: 0,
+        rejectedPartners: 0,
+        totalContentSections: 11,
+        lastUpdated: new Date().toLocaleString('id-ID', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      })
     } finally {
       setLoading(false)
     }

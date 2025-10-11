@@ -23,6 +23,7 @@ export function AdminAuthWrapper({ children }: AdminAuthWrapperProps) {
       NEXT_PUBLIC_MASTER_ADMIN_EMAIL: process.env.NEXT_PUBLIC_MASTER_ADMIN_EMAIL
     })
     
+    // Add a small delay to ensure session is fully loaded
     if (!session) {
       console.log('AdminAuthWrapper - No session, redirecting to login')
       // Not authenticated, redirect to login

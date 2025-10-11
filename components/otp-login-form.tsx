@@ -78,7 +78,8 @@ export function OTPLoginForm({ onSuccess }: OTPLoginFormProps) {
       const result = await signIn('credentials', {
         email,
         otp,
-        redirect: false,
+        redirect: true,
+        callbackUrl: '/admin'
       })
 
       console.log('OTP Login Result:', result)
@@ -88,16 +89,10 @@ export function OTPLoginForm({ onSuccess }: OTPLoginFormProps) {
         setMessage('OTP tidak valid atau sudah kadaluarsa')
         setMessageType('error')
       } else {
-        console.log('Login successful, redirecting to admin...')
-        setMessage('Login berhasil!')
+        console.log('Login successful, NextAuth will handle redirect...')
+        setMessage('Login berhasil! Mengalihkan...')
         setMessageType('success')
-        
-        setTimeout(() => {
-          console.log('Executing redirect to /admin')
-          router.push('/admin')
-          router.refresh()
-          onSuccess?.()
-        }, 1000)
+        onSuccess?.()
       }
     } catch (error) {
       setMessage('Terjadi kesalahan. Silakan coba lagi.')
