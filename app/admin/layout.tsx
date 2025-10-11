@@ -1,6 +1,5 @@
 "use client"
 
-import { AdminSessionProvider } from '@/components/admin-session-provider'
 import { AdminAuthWrapper } from '@/components/admin-auth-wrapper'
 import { AdminSidebar } from '@/components/admin-sidebar'
 import { AdminHeader } from '@/components/admin-header'
@@ -36,11 +35,5 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <AdminSessionProvider>
-      <AdminLayoutContent>
-        {children}
-      </AdminLayoutContent>
-    </AdminSessionProvider>
-  )
+  return <AdminLayoutContent>{children}</AdminLayoutContent>
 }
