@@ -3,32 +3,71 @@
 import type React from "react"
 
 import { Card } from "@/components/ui/card"
-import { Users, Truck, ShoppingBag } from "lucide-react"
+import { Users, Truck, ShoppingBag, TrendingUp, Award, MapPin } from "lucide-react"
 import { useEffect, useState } from "react"
+
+interface StatItem {
+  label: string
+  value: string
+  description: string
+  order: number
+}
+
+interface StatsData {
+  title: string
+  subtitle: string
+  stats: StatItem[]
+}
 
 interface StatCardProps {
   icon: React.ReactNode
   label: string
-  value: number
-  suffix?: string
+  value: string
+  description: string
 }
 
-function StatCard({ icon, label, value, suffix = "" }: StatCardProps) {
+function StatCard({ icon, label, value, description }: StatCardProps) {
   const [count, setCount] = useState(0)
+  const [displayValue, setDisplayValue] = useState("0")
 
   useEffect(() => {
+    // Extract numeric value from string (handle "10,000+" format)
+    const numericValue = parseInt(value.replace(/[^\d]/g, '')) || 0
+    const hasPlus = value.includes('+')
+    const hasK = value.includes('K') || value.includes('k')
+    const hasYear = value.includes('Tahun') || value.includes('Year')
+    
     const duration = 2000
     const steps = 60
-    const increment = value / steps
+    const increment = numericValue / steps
     let current = 0
 
     const timer = setInterval(() => {
       current += increment
-      if (current >= value) {
-        setCount(value)
+      if (current >= numericValue) {
+        setCount(numericValue)
+        // Format the display value based on original format
+        if (hasYear) {
+          setDisplayValue(value)
+        } else if (hasK) {
+          setDisplayValue(`${(numericValue / 1000).toFixed(0)}+K`)
+        } else if (hasPlus) {
+          setDisplayValue(`${numericValue.toLocaleString()}+`)
+        } else {
+          setDisplayValue(numericValue.toLocaleString())
+        }
         clearInterval(timer)
       } else {
-        setCount(Math.floor(current))
+        const floorValue = Math.floor(current)
+        if (hasYear) {
+          setDisplayValue(value)
+        } else if (hasK) {
+          setDisplayValue(`${(floorValue / 1000).toFixed(0)}+K`)
+        } else if (hasPlus) {
+          setDisplayValue(`${floorValue.toLocaleString()}+`)
+        } else {
+          setDisplayValue(floorValue.toLocaleString())
+        }
       }
     }, duration / steps)
 
@@ -43,30 +82,87 @@ function StatCard({ icon, label, value, suffix = "" }: StatCardProps) {
         </div>
       </div>
       <div className="text-3xl font-bold text-gray-900 mb-2">
-        {count.toLocaleString()}
-        {suffix}
+        {displayValue}
       </div>
-      <div className="text-gray-600 font-medium">{label}</div>
+      <div className="text-gray-600 font-medium mb-1">{label}</div>
+      <div className="text-sm text-gray-500">{description}</div>
     </Card>
   )
 }
 
+function getIcon(index: number) {
+  const icons = [<Truck className="h-8 w-8" />, <Users className="h-8 w-8" />, <MapPin className="h-8 w-8" />, <Award className="h-8 w-8" />, <TrendingUp className="h-8 w-8" />, <ShoppingBag className="h-8 w-8" />]
+  return icons[index % icons.length]
+}
+
 export function StatsSection() {
+  const [statsData, setStatsData] = useState<StatsData>({
+    title: 'Statistik Kami',
+    subtitle: 'Bukti komitmen kami dalam melayani Anda',
+    stats: [
+      {
+        label: 'Pengiriman Sukses',
+        value: '10,000+',
+        description: 'Paket berhasil dikirim',
+        order: 1
+      },
+      {
+        label: 'Pelanggan Puas',
+        value: '5,000+',
+        description: 'Pelanggan setia',
+        order: 2
+      },
+      {
+        label: 'Kota Terlayani',
+        value: '50+',
+        description: 'Kota di seluruh Indonesia',
+        order: 3
+      },
+      {
+        label: 'Pengalaman',
+        value: '5+',
+        description: 'Tahun berpengalaman',
+        order: 4
+      }
+    ]
+  })
+
+  useEffect(() => {
+    fetch('/api/content')
+      .then(res => res.json())
+      .then(data => {
+        if (data.stats) {
+          setStatsData(data.stats)
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching stats content:', error)
+      })
+  }, [])
+
   return (
     <section className="py-20 bg-gradient-to-r from-[#6c1618] to-[#af1b1c]">
       <div className="container mx-auto px-4">
         {/* Title Section */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">Dipercaya Ribuan Pelanggan</h2>
+          <h2 className="text-4xl font-bold text-white mb-4">{statsData.title}</h2>
           <p className="text-xl text-white/90 max-w-2xl mx-auto">
-            Bergabunglah dengan ribuan pelanggan yang telah merasakan layanan pengiriman terpercaya dari KurirQu
+            {statsData.subtitle}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-          <StatCard icon={<Truck className="h-8 w-8" />} label="Layanan" value={10} />
-          <StatCard icon={<Users className="h-8 w-8" />} label="Kurir" value={20} />
-          <StatCard icon={<ShoppingBag className="h-8 w-8" />} label="Order Masuk" value={1463} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+          {statsData.stats
+            .sort((a, b) => a.order - b.order)
+            .map((stat, index) => (
+              <StatCard
+                key={index}
+                icon={getIcon(index)}
+                label={stat.label}
+                value={stat.value}
+                description={stat.description}
+              />
+            ))}
         </div>
       </div>
     </section>

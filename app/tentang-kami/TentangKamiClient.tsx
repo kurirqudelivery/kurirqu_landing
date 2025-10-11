@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -11,45 +12,80 @@ import {
   CheckCircle,
   MessageCircle,
   ArrowLeft,
+  LucideIcon,
 } from "lucide-react"
 import Link from "next/link"
 import { Navbar } from "@/components/navbar"
 
-export default function TentangKamiClient() {
-  const services = [
-    {
-      icon: <Truck className="h-8 w-8" />,
-      title: "Antar Paket & Dokumen",
-      description: "Kirim paket atau dokumen penting dengan cepat, aman, dan tepat waktu.",
-    },
-    {
-      icon: <UtensilsCrossed className="h-8 w-8" />,
-      title: "Antar Makanan",
-      description: "Mau makanan favorit? Tinggal chat, kami antar langsung ke lokasi Anda.",
-    },
-    {
-      icon: <Car className="h-8 w-8" />,
-      title: "Ojek Motor & Mobil",
-      description: "Butuh tumpangan motor atau mobil? Tinggal pesan, kami segera jemput.",
-    },
-    {
-      icon: <CarTaxiFront className="h-8 w-8" />,
-      title: "Rental Mobil",
-      description: "Sewa mobil harian atau untuk perjalanan khusus, gampang lewat WhatsApp.",
-    },
-    {
-      icon: <Sparkles className="h-8 w-8" />,
-      title: "Jasa Bersih-Bersih",
-      description: "Rumah, kos, atau kantor jadi lebih bersih tanpa ribet cari orang.",
-    },
-  ]
+interface Service {
+  icon: string
+  title: string
+  description: string
+}
 
-  const benefits = [
-    "Cuma lewat WhatsApp – pesan apapun cukup chat admin.",
-    "Tanpa aplikasi tambahan – gak perlu download atau daftar akun.",
-    "Praktis & Cepat – semua layanan bisa diproses dalam hitungan menit.",
-    "Layanan lengkap – dari antar paket, makanan, transportasi, sampai bersih-bersih.",
-  ]
+interface TentangKamiData {
+  headerTitle: string
+  headerSubtitle: string
+  storyTitle: string
+  storyContent: string[]
+  servicesTitle: string
+  services: Service[]
+  whyChooseTitle: string
+  benefits: string[]
+  ctaTitle: string
+  ctaDescription: string
+  ctaButtonText: string
+  ctaButtonUrl: string
+}
+
+const iconMap: Record<string, LucideIcon> = {
+  Truck,
+  UtensilsCrossed,
+  Car,
+  CarTaxiFront,
+  Sparkles,
+}
+
+export default function TentangKamiClient() {
+  const [data, setData] = useState<TentangKamiData | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('/api/admin/tentang-kami')
+      const result = await response.json()
+      setData(result)
+    } catch (error) {
+      console.error('Error fetching Tentang Kami data:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#6c1618]"></div>
+      </div>
+    )
+  }
+
+  if (!data) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <p>Failed to load content</p>
+      </div>
+    )
+  }
+
+  const getServiceIcon = (iconName: string) => {
+    const IconComponent = iconMap[iconName] || Truck
+    return <IconComponent className="h-8 w-8" />
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -66,9 +102,9 @@ export default function TentangKamiClient() {
               <ArrowLeft className="h-5 w-5" />
               Kembali ke Beranda
             </Link>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Tentang KurirQu</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">{data.headerTitle}</h1>
             <p className="text-xl text-white/90 leading-relaxed">
-              Solusi praktis untuk semua kebutuhan harian Anda, cukup lewat WhatsApp
+              {data.headerSubtitle}
             </p>
           </div>
         </div>
@@ -79,21 +115,16 @@ export default function TentangKamiClient() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Cerita Kami</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">{data.storyTitle}</h2>
               <div className="w-24 h-1 bg-gradient-to-r from-[#6c1618] to-[#af1b1c] mx-auto mb-8"></div>
             </div>
 
             <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
-              <p className="text-xl mb-8">
-                Di tengah kesibukan, orang sering males ribet harus download aplikasi baru cuma buat pesan layanan. Dari
-                situ lahirlah <strong className="text-[#6c1618]">KurirQu</strong>: solusi praktis untuk semua kebutuhan
-                harian Anda, cukup lewat WhatsApp.
-              </p>
-
-              <p className="text-lg mb-8">
-                Kami paham hampir semua orang Indonesia pakai WhatsApp setiap hari. Jadi, kami buat segalanya lebih
-                gampang: tinggal chat admin, langsung order. Tanpa ribet install aplikasi, tanpa repot bikin akun.
-              </p>
+              {data.storyContent.map((paragraph, index) => (
+                <p key={index} className={`${index === 0 ? 'text-xl mb-8' : 'text-lg mb-8'}`}>
+                  {paragraph}
+                </p>
+              ))}
             </div>
           </div>
         </div>
@@ -104,19 +135,19 @@ export default function TentangKamiClient() {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Layanan Kami</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">{data.servicesTitle}</h2>
               <div className="w-24 h-1 bg-gradient-to-r from-[#6c1618] to-[#af1b1c] mx-auto mb-8"></div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {services.map((service, index) => (
+              {data.services.map((service, index) => (
                 <Card
                   key={index}
                   className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
                 >
                   <CardContent className="p-8 text-center">
                     <div className="w-16 h-16 bg-gradient-to-r from-[#6c1618] to-[#af1b1c] rounded-full flex items-center justify-center text-white mx-auto mb-6">
-                      {service.icon}
+                      {getServiceIcon(service.icon)}
                     </div>
                     <h3 className="text-xl font-bold text-gray-900 mb-4">{service.title}</h3>
                     <p className="text-gray-600 leading-relaxed">{service.description}</p>
@@ -133,12 +164,12 @@ export default function TentangKamiClient() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Kenapa Pilih KurirQu?</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">{data.whyChooseTitle}</h2>
               <div className="w-24 h-1 bg-gradient-to-r from-[#6c1618] to-[#af1b1c] mx-auto mb-8"></div>
             </div>
 
             <div className="space-y-6">
-              {benefits.map((benefit, index) => (
+              {data.benefits.map((benefit, index) => (
                 <div
                   key={index}
                   className="flex items-start gap-4 p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
@@ -159,19 +190,19 @@ export default function TentangKamiClient() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <div className="mb-8">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">💡 Dengan KurirQu, hidup jadi lebih mudah.</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">{data.ctaTitle}</h2>
               <p className="text-xl text-white/90 leading-relaxed">
-                Karena semua bisa beres hanya lewat satu chat di WhatsApp.
+                {data.ctaDescription}
               </p>
             </div>
 
             <Button
               size="lg"
               className="bg-white text-[#6c1618] hover:bg-gray-100 text-lg font-semibold px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-              onClick={() => window.open("https://wa.link/dvsne2", "_blank")}
+              onClick={() => window.open(data.ctaButtonUrl, "_blank")}
             >
               <MessageCircle className="mr-2 h-5 w-5" />
-              Chat Admin Sekarang
+              {data.ctaButtonText}
             </Button>
           </div>
         </div>

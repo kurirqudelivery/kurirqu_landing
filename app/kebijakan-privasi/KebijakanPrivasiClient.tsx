@@ -1,12 +1,73 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowLeft, Shield, Eye, Lock, Database, UserCheck } from "lucide-react"
+import { ArrowLeft, Shield, Eye, Lock, Database, UserCheck, LucideIcon } from "lucide-react"
 import Link from "next/link"
 import { Navbar } from "@/components/navbar"
 
+interface Section {
+  title: string
+  icon?: string
+  content: string[]
+}
+
+interface KebijakanPrivasiData {
+  headerTitle: string
+  headerSubtitle: string
+  sections: Section[]
+  contactButtonText: string
+  contactButtonUrl: string
+}
+
+const iconMap: Record<string, LucideIcon> = {
+  Database,
+  Eye,
+  Lock,
+  UserCheck,
+}
+
 export default function KebijakanPrivasiClient() {
+  const [data, setData] = useState<KebijakanPrivasiData | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('/api/admin/kebijakan-privasi')
+      const result = await response.json()
+      setData(result)
+    } catch (error) {
+      console.error('Error fetching Kebijakan Privasi data:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#6c1618]"></div>
+      </div>
+    )
+  }
+
+  if (!data) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <p>Failed to load content</p>
+      </div>
+    )
+  }
+
+  const getSectionIcon = (iconName: string) => {
+    const IconComponent = iconMap[iconName] || Database
+    return <IconComponent className="h-5 w-5 text-[#af1b1c]" />
+  }
   return (
     <div className="min-h-screen bg-white">
       {/* Navbar */}
@@ -22,8 +83,8 @@ export default function KebijakanPrivasiClient() {
             <ArrowLeft className="h-4 w-4" />
             Kembali ke Beranda
           </Link>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Kebijakan Privasi</h1>
-          <p className="text-xl text-white/90">Komitmen kami dalam melindungi data pribadi Anda</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">{data.headerTitle}</h1>
+          <p className="text-xl text-white/90">{data.headerSubtitle}</p>
         </div>
       </div>
 
@@ -41,177 +102,50 @@ export default function KebijakanPrivasiClient() {
           </div>
 
           <div className="space-y-8">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Database className="h-5 w-5 text-[#af1b1c]" />
-                  1. Informasi yang Kami Kumpulkan
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p>Kami mengumpulkan informasi berikut untuk memberikan layanan terbaik:</p>
-                <ul className="list-disc list-inside space-y-2 text-gray-700">
-                  <li>
-                    <strong>Informasi Pribadi:</strong> Nama, nomor telepon, alamat email
-                  </li>
-                  <li>
-                    <strong>Informasi Alamat:</strong> Alamat pengambilan dan pengiriman
-                  </li>
-                  <li>
-                    <strong>Informasi Transaksi:</strong> Detail pesanan, metode pembayaran
-                  </li>
-                  <li>
-                    <strong>Informasi Komunikasi:</strong> Riwayat chat WhatsApp untuk keperluan layanan
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Eye className="h-5 w-5 text-[#af1b1c]" />
-                  2. Bagaimana Kami Menggunakan Informasi
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p>Informasi yang dikumpulkan digunakan untuk:</p>
-                <ul className="list-disc list-inside space-y-2 text-gray-700">
-                  <li>Memproses dan melaksanakan pesanan pengiriman</li>
-                  <li>Berkomunikasi dengan Anda mengenai status pesanan</li>
-                  <li>Memberikan layanan pelanggan yang optimal</li>
-                  <li>Meningkatkan kualitas layanan kami</li>
-                  <li>Mengirimkan informasi promosi (dengan persetujuan Anda)</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Lock className="h-5 w-5 text-[#af1b1c]" />
-                  3. Keamanan Data
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p>Kami menerapkan langkah-langkah keamanan untuk melindungi data Anda:</p>
-                <ul className="list-disc list-inside space-y-2 text-gray-700">
-                  <li>Enkripsi data sensitif selama transmisi</li>
-                  <li>Akses terbatas hanya untuk karyawan yang berwenang</li>
-                  <li>Penyimpanan data di server yang aman</li>
-                  <li>Pemantauan keamanan secara berkala</li>
-                  <li>Backup data secara rutin untuk mencegah kehilangan</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <UserCheck className="h-5 w-5 text-[#af1b1c]" />
-                  4. Berbagi Informasi dengan Pihak Ketiga
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p>
-                  Kami tidak menjual atau menyewakan data pribadi Anda. Informasi hanya dibagikan dalam kondisi berikut:
-                </p>
-                <ul className="list-disc list-inside space-y-2 text-gray-700">
-                  <li>Dengan persetujuan eksplisit dari Anda</li>
-                  <li>Untuk memenuhi kewajiban hukum</li>
-                  <li>Kepada mitra kurir untuk keperluan pengiriman</li>
-                  <li>Dalam situasi darurat untuk melindungi keselamatan</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>5. Hak-Hak Anda</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p>Sebagai pengguna layanan KurirQu, Anda memiliki hak untuk:</p>
-                <ul className="list-disc list-inside space-y-2 text-gray-700">
-                  <li>Mengakses data pribadi yang kami simpan</li>
-                  <li>Meminta koreksi data yang tidak akurat</li>
-                  <li>Meminta penghapusan data pribadi Anda</li>
-                  <li>Menolak penggunaan data untuk tujuan pemasaran</li>
-                  <li>Meminta portabilitas data Anda</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>6. Cookies dan Teknologi Pelacakan</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p>
-                  Website kami menggunakan cookies untuk meningkatkan pengalaman pengguna. Cookies membantu kami
-                  memahami preferensi Anda dan memberikan layanan yang lebih personal. Anda dapat mengatur browser untuk
-                  menolak cookies, namun hal ini mungkin mempengaruhi fungsionalitas website.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>7. Penyimpanan Data</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p>
-                  Data pribadi Anda akan disimpan selama diperlukan untuk memberikan layanan atau sesuai dengan
-                  ketentuan hukum yang berlaku. Data transaksi akan disimpan minimal 5 tahun untuk keperluan audit dan
-                  perpajakan.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>8. Perubahan Kebijakan Privasi</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p>
-                  Kebijakan privasi ini dapat diperbarui sewaktu-waktu untuk mencerminkan perubahan dalam praktik kami
-                  atau peraturan yang berlaku. Perubahan signifikan akan diberitahukan melalui email atau pemberitahuan
-                  di website kami.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>9. Hubungi Kami</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p>
-                  Jika Anda memiliki pertanyaan atau kekhawatiran mengenai kebijakan privasi ini, atau ingin menggunakan
-                  hak-hak Anda terkait data pribadi, silakan hubungi kami:
-                </p>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <p>
-                    <strong>Email:</strong> privacy@kurirqu.com
-                  </p>
-                  <p>
-                    <strong>WhatsApp:</strong> +62 822-3641-8724
-                  </p>
-                  <p>
-                    <strong>Alamat:</strong> Jl. Griya Jati Permai, Sukorejo, Kec. Sukorejo, Kota Blitar, Jawa Timur
-                    66121
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+            {data.sections.map((section, index) => (
+              <Card key={index}>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    {section.icon && getSectionIcon(section.icon)}
+                    {section.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {section.content.map((content, contentIndex) => {
+                    if (content.includes('<li>')) {
+                      // Handle list items
+                      const listItems = content.split('<li>').filter(item => item.trim()).map(item => 
+                        item.replace('</li>', '').trim()
+                      )
+                      return (
+                        <ul key={contentIndex} className="list-disc list-inside space-y-2 text-gray-700">
+                          {listItems.map((item, itemIndex) => (
+                            <li key={itemIndex} dangerouslySetInnerHTML={{ __html: item }} />
+                          ))}
+                        </ul>
+                      )
+                    } else if (content.includes('<div')) {
+                      // Handle special formatted content like contact info
+                      return (
+                        <div key={contentIndex} dangerouslySetInnerHTML={{ __html: content }} />
+                      )
+                    } else {
+                      // Handle paragraph content
+                      return <p key={contentIndex}>{content}</p>
+                    }
+                  })}
+                </CardContent>
+              </Card>
+            ))}
           </div>
 
           <div className="mt-12 text-center">
             <p className="text-gray-600 mb-6">Terima kasih atas kepercayaan Anda menggunakan layanan KurirQu.</p>
             <Button
               className="bg-gradient-to-r from-[#6c1618] to-[#af1b1c] hover:from-[#5a1315] hover:to-[#9a1719] text-white"
-              onClick={() => window.open("https://wa.link/dvsne2", "_blank")}
+              onClick={() => window.open(data.contactButtonUrl, "_blank")}
             >
-              Hubungi Kami
+              {data.contactButtonText}
             </Button>
           </div>
         </div>

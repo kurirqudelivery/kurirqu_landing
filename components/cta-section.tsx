@@ -1,20 +1,55 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { MessageCircle, ArrowRight, Smartphone, Clock } from "lucide-react"
 import Image from "next/image"
 
+interface CTAData {
+  title: string
+  subtitle: string
+  buttonText: string
+  buttonUrl: string
+  description?: string
+  qrCodeUrl?: string
+}
+
 export function CTASection() {
+  const [ctaData, setCtaData] = useState<CTAData>({
+    title: 'Siap Untuk Memesan?',
+    subtitle: 'Bergabunglah dengan ribuan pelanggan yang sudah merasakan kemudahan layanan KurirQu',
+    buttonText: 'Hubungi KurirQu',
+    buttonUrl: 'https://wa.link/dvsne2',
+    description: 'Pesan sekarang dan nikmati pengiriman cepat, aman, dan terpercaya!'
+  })
+
+  useEffect(() => {
+    fetch('/api/content')
+      .then(res => res.json())
+      .then(data => {
+        if (data.cta) {
+          setCtaData(data.cta)
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching CTA content:', error)
+      })
+  }, [])
+
   return (
     <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6">Siap Untuk Memesan?</h2>
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6">{ctaData.title}</h2>
             <p className="text-xl text-gray-600 mb-4 max-w-3xl mx-auto">
-              Bergabunglah dengan ribuan pelanggan yang sudah merasakan kemudahan layanan KurirQu. Pesan sekarang dan
-              nikmati pengiriman cepat, aman, dan terpercaya!
+              {ctaData.subtitle}
             </p>
+            {ctaData.description && (
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                {ctaData.description}
+              </p>
+            )}
           </div>
 
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -24,7 +59,7 @@ export function CTASection() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">Scan & Pesan Langsung!</h3>
                 <div className="bg-gradient-to-br from-gray-100 to-gray-50 rounded-2xl p-6 mb-6">
                   <Image
-                    src="https://i.postimg.cc/Gpk5wtbR/kurirqudirect.png"
+                    src={ctaData.qrCodeUrl || "https://i.postimg.cc/Gpk5wtbR/kurirqudirect.png"}
                     alt="QR Code WhatsApp KurirQu"
                     width={200}
                     height={200}
@@ -46,10 +81,10 @@ export function CTASection() {
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-[#6c1618] to-[#af1b1c] hover:from-[#5a1315] hover:to-[#9a1719] text-white rounded-full px-12 py-6 text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 mb-8"
-                onClick={() => window.open("https://wa.link/dvsne2", "_blank")}
+                onClick={() => window.open(ctaData.buttonUrl, "_blank")}
               >
                 <MessageCircle className="mr-3 h-6 w-6" />
-                Hubungi KurirQu
+                {ctaData.buttonText}
                 <ArrowRight className="ml-3 h-6 w-6" />
               </Button>
 

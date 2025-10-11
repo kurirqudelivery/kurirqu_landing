@@ -1,6 +1,22 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import type React from "react"
 import { Card } from "@/components/ui/card"
-import { Car, UtensilsCrossed, Package } from "lucide-react"
+import { Car, UtensilsCrossed, Package, Truck, Zap, Clock } from "lucide-react"
+
+interface Service {
+  title: string
+  description: string
+  icon: string
+  order: number
+}
+
+interface ServicesData {
+  title: string
+  subtitle: string
+  services: Service[]
+}
 
 interface ServiceCardProps {
   icon: React.ReactNode
@@ -22,33 +38,85 @@ function ServiceCard({ icon, title, description }: ServiceCardProps) {
   )
 }
 
+function getIcon(iconName: string) {
+  switch (iconName) {
+    case 'car':
+      return <Car className="h-8 w-8" />
+    case 'utensils':
+      return <UtensilsCrossed className="h-8 w-8" />
+    case 'package':
+      return <Package className="h-8 w-8" />
+    case 'truck':
+      return <Truck className="h-8 w-8" />
+    case 'zap':
+      return <Zap className="h-8 w-8" />
+    case 'clock':
+      return <Clock className="h-8 w-8" />
+    default:
+      return <Package className="h-8 w-8" />
+  }
+}
+
 export function ServicesSection() {
+  const [servicesData, setServicesData] = useState<ServicesData>({
+    title: 'Layanan Kami',
+    subtitle: 'Berbagai layanan terpercaya untuk memenuhi kebutuhan Anda',
+    services: [
+      {
+        title: 'Transportasi',
+        description: 'Layanan transportasi cepat dan aman untuk perjalanan Anda dalam kota',
+        icon: 'car',
+        order: 1
+      },
+      {
+        title: 'Pesan Makanan',
+        description: 'Pesan makanan favorit Anda dari berbagai restoran dengan pengiriman cepat',
+        icon: 'utensils',
+        order: 2
+      },
+      {
+        title: 'Kirim Barang / Delivery',
+        description: 'Kirim barang Anda dengan aman dan tepat waktu ke seluruh kota',
+        icon: 'package',
+        order: 3
+      }
+    ]
+  })
+
+  useEffect(() => {
+    fetch('/api/content')
+      .then(res => res.json())
+      .then(data => {
+        if (data.services) {
+          setServicesData(data.services)
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching services content:', error)
+      })
+  }, [])
+
   return (
     <section className="py-20 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Layanan Kami</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{servicesData.title}</h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Berbagai layanan terpercaya untuk memenuhi kebutuhan Anda
+            {servicesData.subtitle}
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          <ServiceCard
-            icon={<Car className="h-8 w-8" />}
-            title="Transportasi"
-            description="Layanan transportasi cepat dan aman untuk perjalanan Anda dalam kota"
-          />
-          <ServiceCard
-            icon={<UtensilsCrossed className="h-8 w-8" />}
-            title="Pesan Makanan"
-            description="Pesan makanan favorit Anda dari berbagai restoran dengan pengiriman cepat"
-          />
-          <ServiceCard
-            icon={<Package className="h-8 w-8" />}
-            title="Kirim Barang / Delivery"
-            description="Kirim barang Anda dengan aman dan tepat waktu ke seluruh kota"
-          />
+          {servicesData.services
+            .sort((a, b) => a.order - b.order)
+            .map((service, index) => (
+              <ServiceCard
+                key={index}
+                icon={getIcon(service.icon)}
+                title={service.title}
+                description={service.description}
+              />
+            ))}
         </div>
       </div>
     </section>

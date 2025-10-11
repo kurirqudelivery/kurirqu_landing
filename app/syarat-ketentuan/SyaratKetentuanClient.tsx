@@ -1,12 +1,73 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowLeft, Shield, FileText, Clock, AlertTriangle } from "lucide-react"
+import { ArrowLeft, Shield, FileText, Clock, AlertTriangle, LucideIcon } from "lucide-react"
 import Link from "next/link"
 import { Navbar } from "@/components/navbar"
 
+interface Section {
+  title: string
+  icon?: string
+  content: string[]
+}
+
+interface SyaratKetentuanData {
+  headerTitle: string
+  headerSubtitle: string
+  lastUpdated: string
+  sections: Section[]
+  contactButtonText: string
+  contactButtonUrl: string
+}
+
+const iconMap: Record<string, LucideIcon> = {
+  FileText,
+  Shield,
+  AlertTriangle,
+}
+
 export default function SyaratKetentuanClient() {
+  const [data, setData] = useState<SyaratKetentuanData | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('/api/admin/syarat-ketentuan')
+      const result = await response.json()
+      setData(result)
+    } catch (error) {
+      console.error('Error fetching Syarat & Ketentuan data:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#6c1618]"></div>
+      </div>
+    )
+  }
+
+  if (!data) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <p>Failed to load content</p>
+      </div>
+    )
+  }
+
+  const getSectionIcon = (iconName: string) => {
+    const IconComponent = iconMap[iconName] || FileText
+    return <IconComponent className="h-5 w-5 text-[#af1b1c]" />
+  }
   return (
     <div className="min-h-screen bg-white">
       {/* Navbar */}
@@ -22,8 +83,8 @@ export default function SyaratKetentuanClient() {
             <ArrowLeft className="h-4 w-4" />
             Kembali ke Beranda
           </Link>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Syarat & Ketentuan</h1>
-          <p className="text-xl text-white/90">Ketentuan penggunaan layanan KurirQu</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">{data.headerTitle}</h1>
+          <p className="text-xl text-white/90">{data.headerSubtitle}</p>
         </div>
       </div>
 
@@ -33,7 +94,7 @@ export default function SyaratKetentuanClient() {
           <div className="mb-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <div className="flex items-center gap-2 text-blue-700 mb-2">
               <Clock className="h-5 w-5" />
-              <span className="font-semibold">Terakhir diperbarui: 1 Januari 2025</span>
+              <span className="font-semibold">Terakhir diperbarui: {data.lastUpdated}</span>
             </div>
             <p className="text-blue-600">
               Dengan menggunakan layanan KurirQu, Anda menyetujui syarat dan ketentuan berikut.
@@ -41,117 +102,36 @@ export default function SyaratKetentuanClient() {
           </div>
 
           <div className="space-y-8">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-[#af1b1c]" />
-                  1. Definisi Layanan
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p>
-                  KurirQu adalah layanan pengiriman dan kurir yang melayani wilayah Blitar dan sekitarnya. Layanan kami
-                  meliputi:
-                </p>
-                <ul className="list-disc list-inside space-y-2 text-gray-700">
-                  <li>Pengiriman dokumen dan paket</li>
-                  <li>Layanan antar makanan dan minuman</li>
-                  <li>Belanja dan pengiriman barang</li>
-                  <li>Layanan kurir ekspres</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-[#af1b1c]" />
-                  2. Tanggung Jawab Pengguna
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <ul className="list-disc list-inside space-y-2 text-gray-700">
-                  <li>Memberikan informasi yang akurat mengenai alamat pengiriman dan penerima</li>
-                  <li>Memastikan barang yang dikirim tidak melanggar hukum atau berbahaya</li>
-                  <li>Membayar biaya layanan sesuai dengan tarif yang telah disepakati</li>
-                  <li>Memberikan akses yang memadai untuk proses pengambilan dan pengiriman</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5 text-[#af1b1c]" />
-                  3. Barang yang Tidak Dapat Dikirim
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p>KurirQu tidak menerima pengiriman untuk barang-barang berikut:</p>
-                <ul className="list-disc list-inside space-y-2 text-gray-700">
-                  <li>Barang ilegal, narkoba, atau zat terlarang</li>
-                  <li>Senjata api, bahan peledak, atau bahan berbahaya</li>
-                  <li>Uang tunai dalam jumlah besar</li>
-                  <li>Barang mudah rusak tanpa kemasan yang memadai</li>
-                  <li>Hewan hidup</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>4. Tarif dan Pembayaran</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <ul className="list-disc list-inside space-y-2 text-gray-700">
-                  <li>Tarif dihitung berdasarkan jarak, berat, dan jenis layanan</li>
-                  <li>Pembayaran dapat dilakukan secara tunai atau transfer</li>
-                  <li>Biaya tambahan dapat dikenakan untuk layanan di luar jam operasional</li>
-                  <li>Tarif dapat berubah sewaktu-waktu dengan pemberitahuan sebelumnya</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>5. Tanggung Jawab KurirQu</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <ul className="list-disc list-inside space-y-2 text-gray-700">
-                  <li>Mengantarkan barang sesuai dengan alamat yang diberikan</li>
-                  <li>Menjaga keamanan barang selama proses pengiriman</li>
-                  <li>Memberikan konfirmasi pengiriman kepada pengirim</li>
-                  <li>Mengganti kerugian sesuai dengan ketentuan asuransi yang berlaku</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>6. Pembatasan Tanggung Jawab</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <ul className="list-disc list-inside space-y-2 text-gray-700">
-                  <li>KurirQu tidak bertanggung jawab atas keterlambatan akibat force majeure</li>
-                  <li>Ganti rugi maksimal sebesar nilai barang atau Rp 500.000, mana yang lebih kecil</li>
-                  <li>Tidak bertanggung jawab atas kerusakan akibat kemasan yang tidak memadai</li>
-                  <li>Klaim kerugian harus dilaporkan maksimal 24 jam setelah pengiriman</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>7. Perubahan Syarat & Ketentuan</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p>
-                  KurirQu berhak mengubah syarat dan ketentuan ini sewaktu-waktu. Perubahan akan diberitahukan melalui
-                  website atau media komunikasi resmi kami. Penggunaan layanan setelah perubahan dianggap sebagai
-                  persetujuan terhadap syarat dan ketentuan yang baru.
-                </p>
-              </CardContent>
-            </Card>
+            {data.sections.map((section, index) => (
+              <Card key={index}>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    {section.icon && getSectionIcon(section.icon)}
+                    {section.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {section.content.map((content, contentIndex) => {
+                    if (content.includes('<li>')) {
+                      // Handle list items
+                      const listItems = content.split('<li>').filter(item => item.trim()).map(item => 
+                        item.replace('</li>', '').trim()
+                      )
+                      return (
+                        <ul key={contentIndex} className="list-disc list-inside space-y-2 text-gray-700">
+                          {listItems.map((item, itemIndex) => (
+                            <li key={itemIndex}>{item}</li>
+                          ))}
+                        </ul>
+                      )
+                    } else {
+                      // Handle paragraph content
+                      return <p key={contentIndex}>{content}</p>
+                    }
+                  })}
+                </CardContent>
+              </Card>
+            ))}
           </div>
 
           <div className="mt-12 text-center">
@@ -160,9 +140,9 @@ export default function SyaratKetentuanClient() {
             </p>
             <Button
               className="bg-gradient-to-r from-[#6c1618] to-[#af1b1c] hover:from-[#5a1315] hover:to-[#9a1719] text-white"
-              onClick={() => window.open("https://wa.link/dvsne2", "_blank")}
+              onClick={() => window.open(data.contactButtonUrl, "_blank")}
             >
-              Hubungi KurirQu
+              {data.contactButtonText}
             </Button>
           </div>
         </div>

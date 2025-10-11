@@ -129,3 +129,35 @@
     scroll-behavior: smooth;
   }
 }
+
+/* Admin layout improvements */
+@layer components {
+  /* Ensure proper sidebar behavior on all screen sizes */
+  .admin-sidebar {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  /* Improve card responsiveness */
+  .admin-card {
+    @apply bg-white rounded-lg shadow-sm border;
+  }
+  
+  /* Better button spacing on mobile */
+  .admin-button-group {
+    @apply flex flex-col sm:flex-row gap-2 sm:gap-4;
+  }
+  
+  /* Improve form layout responsiveness */
+  .admin-form-grid {
+    @apply grid grid-cols-1 lg:grid-cols-2 gap-6;
+  }
+  
+  /* Better table responsiveness */
+  .admin-table-container {
+    @apply overflow-x-auto -mx-4 sm:mx-0;
+  }
+  
+  .admin-table {
+    @apply min-w-full divide-y divide-gray-200;
+  }
+}
