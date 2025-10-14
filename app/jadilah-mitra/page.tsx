@@ -166,13 +166,14 @@ export default function PartnershipApplicationPage() {
     const formData = new FormData()
     formData.append('file', file)
     
-    const response = await fetch('/api/admin/upload', {
+    const response = await fetch('/api/partnership/upload', {
       method: 'POST',
       body: formData
     })
     
     if (!response.ok) {
-      throw new Error('Failed to upload file')
+      const errorData = await response.json()
+      throw new Error(errorData.error || 'Failed to upload file')
     }
     
     const data = await response.json()
