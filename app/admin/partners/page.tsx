@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Pagination } from '@/components/ui/pagination'
 import { useToast } from '@/hooks/use-toast'
 import { Loader2, Search, Download, Eye, CheckCircle, XCircle, Clock, User } from 'lucide-react'
 import { format } from 'date-fns'
@@ -70,6 +71,7 @@ export default function PartnersPage() {
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [page, setPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(10)
   const [totalPages, setTotalPages] = useState(1)
   const [total, setTotal] = useState(0)
   const [selectedApplication, setSelectedApplication] = useState<PartnerApplication | null>(null)
@@ -82,14 +84,14 @@ export default function PartnersPage() {
 
   useEffect(() => {
     fetchApplications()
-  }, [search, statusFilter, page])
+  }, [search, statusFilter, page, itemsPerPage])
 
   const fetchApplications = async () => {
     setLoading(true)
     try {
       const params = new URLSearchParams({
         page: page.toString(),
-        limit: '10'
+        limit: itemsPerPage.toString()
       })
       
       if (search) params.append('search', search)
@@ -186,6 +188,15 @@ export default function PartnersPage() {
     setStatusNotes('')
     setSendEmailNotification(true)
     setShowDetailModal(true)
+  }
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage)
+  }
+
+  const handleItemsPerPageChange = (newItemsPerPage: number) => {
+    setItemsPerPage(newItemsPerPage)
+    setPage(1) // Reset to first page when changing items per page
   }
 
   if (loading && applications.length === 0) {
@@ -344,31 +355,15 @@ export default function PartnersPage() {
           </div>
 
           {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="px-6 py-4 border-t flex items-center justify-between">
-              <div className="text-sm text-gray-700">
-                Showing {((page - 1) * 10) + 1} to {Math.min(page * 10, total)} of {total} results
-              </div>
-              <div className="flex space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage(page - 1)}
-                  disabled={page === 1}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage(page + 1)}
-                  disabled={page === totalPages}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
-          )}
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            totalItems={total}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+            onItemsPerPageChange={handleItemsPerPageChange}
+            isLoading={loading}
+          />
         </CardContent>
       </Card>
 
