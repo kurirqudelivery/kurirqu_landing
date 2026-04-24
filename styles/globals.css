@@ -67,3 +67,12 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .skeleton {
+    @apply bg-gray-200 animate-pulse rounded-md;
+  }
+  .skeleton-dark {
+    @apply bg-white/20 animate-pulse rounded-md;
+  }
+}

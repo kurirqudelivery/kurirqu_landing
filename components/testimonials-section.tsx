@@ -44,6 +44,7 @@ export function TestimonialsSection() {
     ]
   })
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     fetch('/api/content')
@@ -55,6 +56,9 @@ export function TestimonialsSection() {
       })
       .catch(error => {
         console.error('Error fetching testimonials content:', error)
+      })
+      .finally(() => {
+        setLoading(false)
       })
   }, [])
 
@@ -86,13 +90,37 @@ export function TestimonialsSection() {
     <section className="py-20 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{testimonialsData.title}</h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            {testimonialsData.subtitle}
-          </p>
+          {loading ? (
+            <>
+              <div className="h-10 w-64 mx-auto skeleton mb-4" />
+              <div className="h-6 w-96 mx-auto skeleton" />
+            </>
+          ) : (
+            <>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{testimonialsData.title}</h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                {testimonialsData.subtitle}
+              </p>
+            </>
+          )}
         </div>
 
-        {sortedTestimonials.length > 0 ? (
+        {loading ? (
+          <div className="max-w-4xl mx-auto">
+            <div className="p-8 bg-white rounded-lg shadow-xl">
+              <div className="text-center">
+                <div className="w-20 h-20 skeleton rounded-full mx-auto mb-4" />
+                <div className="h-6 w-32 mx-auto skeleton mb-2" />
+                <div className="h-4 w-24 mx-auto skeleton mb-6" />
+                <div className="flex justify-center gap-1 mb-6">
+                  {[1,2,3,4,5].map(i => <div key={i} className="h-5 w-5 skeleton" />)}
+                </div>
+                <div className="h-4 w-full skeleton mb-2" />
+                <div className="h-4 w-3/4 mx-auto skeleton" />
+              </div>
+            </div>
+          </div>
+        ) : sortedTestimonials.length > 0 ? (
           <div className="relative max-w-4xl mx-auto">
             <Card className="p-8 bg-white shadow-xl">
               <div className="text-center">

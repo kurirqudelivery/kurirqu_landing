@@ -35,6 +35,8 @@ export function Footer() {
     }
   })
 
+  const [loading, setLoading] = useState(true)
+
   useEffect(() => {
     fetch('/api/content')
       .then(res => res.json())
@@ -46,6 +48,9 @@ export function Footer() {
       .catch(error => {
         console.error('Error fetching footer content:', error)
       })
+      .finally(() => {
+        setLoading(false)
+      })
   }, [])
 
   return (
@@ -54,27 +59,41 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="col-span-1 md:col-span-2">
-            <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-[#6c1618] to-[#af1b1c] bg-clip-text text-transparent">
-              {footerData.companyName}
-            </h3>
-            <p className="text-gray-300 mb-6 leading-relaxed">
-              {footerData.description}
-            </p>
-
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <MapPin className="h-5 w-5 text-[#af1b1c]" />
-                <span className="text-gray-300">{footerData.address}</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <Mail className="h-5 w-5 text-[#af1b1c]" />
-                <span className="text-gray-300">{footerData.email}</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <Phone className="h-5 w-5 text-[#af1b1c]" />
-                <span className="text-gray-300">{footerData.phone}</span>
-              </div>
-            </div>
+            {loading ? (
+              <>
+                <div className="h-8 w-32 skeleton-dark mb-4" />
+                <div className="h-4 w-full skeleton-dark mb-2" />
+                <div className="h-4 w-3/4 skeleton-dark mb-6" />
+                <div className="space-y-3">
+                  <div className="h-5 w-full skeleton-dark" />
+                  <div className="h-5 w-48 skeleton-dark" />
+                  <div className="h-5 w-40 skeleton-dark" />
+                </div>
+              </>
+            ) : (
+              <>
+                <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-[#6c1618] to-[#af1b1c] bg-clip-text text-transparent">
+                  {footerData.companyName}
+                </h3>
+                <p className="text-gray-300 mb-6 leading-relaxed">
+                  {footerData.description}
+                </p>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <MapPin className="h-5 w-5 text-[#af1b1c]" />
+                    <span className="text-gray-300">{footerData.address}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Mail className="h-5 w-5 text-[#af1b1c]" />
+                    <span className="text-gray-300">{footerData.email}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Phone className="h-5 w-5 text-[#af1b1c]" />
+                    <span className="text-gray-300">{footerData.phone}</span>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Navigation Links */}
@@ -146,7 +165,7 @@ export function Footer() {
             )}
           </div>
 
-          <p className="text-gray-400 text-center md:text-right">© 2025 {footerData.companyName}. Semua hak dilindungi.</p>
+          <p className="text-gray-400 text-center md:text-right">© 2025 {loading ? 'KurirQu' : footerData.companyName}. Semua hak dilindungi.</p>
         </div>
       </div>
     </footer>

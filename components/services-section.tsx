@@ -83,6 +83,8 @@ export function ServicesSection() {
     ]
   })
 
+  const [loading, setLoading] = useState(true)
+
   useEffect(() => {
     fetch('/api/content')
       .then(res => res.json())
@@ -94,30 +96,57 @@ export function ServicesSection() {
       .catch(error => {
         console.error('Error fetching services content:', error)
       })
+      .finally(() => {
+        setLoading(false)
+      })
   }, [])
 
   return (
     <section className="py-20 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{servicesData.title}</h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            {servicesData.subtitle}
-          </p>
+          {loading ? (
+            <>
+              <div className="h-10 w-64 mx-auto skeleton mb-4" />
+              <div className="h-6 w-96 mx-auto skeleton" />
+            </>
+          ) : (
+            <>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{servicesData.title}</h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                {servicesData.subtitle}
+              </p>
+            </>
+          )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {servicesData.services
-            .sort((a, b) => a.order - b.order)
-            .map((service, index) => (
-              <ServiceCard
-                key={index}
-                icon={getIcon(service.icon)}
-                title={service.title}
-                description={service.description}
-              />
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="p-6 bg-white rounded-lg shadow-lg">
+                <div className="mb-4 flex justify-center">
+                  <div className="w-16 h-16 skeleton rounded-full" />
+                </div>
+                <div className="h-6 w-32 mx-auto skeleton mb-3" />
+                <div className="h-4 w-full skeleton mb-1" />
+                <div className="h-4 w-3/4 mx-auto skeleton" />
+              </div>
             ))}
-        </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {servicesData.services
+              .sort((a, b) => a.order - b.order)
+              .map((service, index) => (
+                <ServiceCard
+                  key={index}
+                  icon={getIcon(service.icon)}
+                  title={service.title}
+                  description={service.description}
+                />
+              ))}
+          </div>
+        )}
       </div>
     </section>
   )

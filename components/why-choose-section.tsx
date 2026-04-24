@@ -85,6 +85,8 @@ export function WhyChooseSection() {
     ]
   })
 
+  const [loading, setLoading] = useState(true)
+
   useEffect(() => {
     fetch('/api/content')
       .then(res => res.json())
@@ -96,6 +98,9 @@ export function WhyChooseSection() {
       .catch(error => {
         console.error('Error fetching why-choose content:', error)
       })
+      .finally(() => {
+        setLoading(false)
+      })
   }, [])
 
   const sortedItems = whyChooseData.items.sort((a, b) => a.order - b.order)
@@ -104,28 +109,52 @@ export function WhyChooseSection() {
     <section className="py-20 bg-gradient-to-r from-[#6c1618] to-[#af1b1c]">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{whyChooseData.title}</h2>
-          <p className="text-xl text-white/90 max-w-2xl mx-auto">
-            {whyChooseData.subtitle}
-          </p>
+          {loading ? (
+            <>
+              <div className="h-10 w-64 mx-auto skeleton-dark mb-4" />
+              <div className="h-6 w-96 mx-auto skeleton-dark" />
+            </>
+          ) : (
+            <>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{whyChooseData.title}</h2>
+              <p className="text-xl text-white/90 max-w-2xl mx-auto">
+                {whyChooseData.subtitle}
+              </p>
+            </>
+          )}
         </div>
 
-        <div className="max-w-4xl mx-auto space-y-6">
-          {sortedItems.map((item, index) => (
-            <div
-              key={index}
-              className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all duration-300 group flex items-center gap-6"
-            >
-              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center text-white flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-                {getIcon(item.icon)}
+        {loading ? (
+          <div className="max-w-4xl mx-auto space-y-6">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 flex items-center gap-6">
+                <div className="w-16 h-16 skeleton-dark rounded-full flex-shrink-0" />
+                <div className="flex-1">
+                  <div className="h-6 w-48 skeleton-dark mb-2" />
+                  <div className="h-4 w-full skeleton-dark mb-1" />
+                  <div className="h-4 w-3/4 skeleton-dark" />
+                </div>
               </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold text-white mb-2">{item.title}</h3>
-                <p className="text-white/90 leading-relaxed">{item.description}</p>
+            ))}
+          </div>
+        ) : (
+          <div className="max-w-4xl mx-auto space-y-6">
+            {sortedItems.map((item, index) => (
+              <div
+                key={index}
+                className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all duration-300 group flex items-center gap-6"
+              >
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center text-white flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                  {getIcon(item.icon)}
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-semibold text-white mb-2">{item.title}</h3>
+                  <p className="text-white/90 leading-relaxed">{item.description}</p>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )

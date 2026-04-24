@@ -127,6 +127,8 @@ export function StatsSection() {
     ]
   })
 
+  const [loading, setLoading] = useState(true)
+
   useEffect(() => {
     fetch('/api/content')
       .then(res => res.json())
@@ -138,6 +140,9 @@ export function StatsSection() {
       .catch(error => {
         console.error('Error fetching stats content:', error)
       })
+      .finally(() => {
+        setLoading(false)
+      })
   }, [])
 
   return (
@@ -145,25 +150,49 @@ export function StatsSection() {
       <div className="container mx-auto px-4">
         {/* Title Section */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">{statsData.title}</h2>
-          <p className="text-xl text-white/90 max-w-2xl mx-auto">
-            {statsData.subtitle}
-          </p>
+          {loading ? (
+            <>
+              <div className="h-10 w-64 mx-auto skeleton-dark mb-4" />
+              <div className="h-6 w-96 mx-auto skeleton-dark" />
+            </>
+          ) : (
+            <>
+              <h2 className="text-4xl font-bold text-white mb-4">{statsData.title}</h2>
+              <p className="text-xl text-white/90 max-w-2xl mx-auto">
+                {statsData.subtitle}
+              </p>
+            </>
+          )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-          {(statsData.stats || [])
-            .sort((a, b) => a.order - b.order)
-            .map((stat, index) => (
-              <StatCard
-                key={index}
-                icon={getIcon(index)}
-                label={stat.label}
-                value={stat.value}
-                description={stat.description}
-              />
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="p-6 text-center bg-white/10 rounded-xl">
+                <div className="mb-4 flex justify-center">
+                  <div className="w-16 h-16 skeleton-dark rounded-full" />
+                </div>
+                <div className="h-8 w-20 mx-auto skeleton-dark mb-2" />
+                <div className="h-5 w-28 mx-auto skeleton-dark mb-1" />
+                <div className="h-4 w-32 mx-auto skeleton-dark" />
+              </div>
             ))}
-        </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+            {(statsData.stats || [])
+              .sort((a, b) => a.order - b.order)
+              .map((stat, index) => (
+                <StatCard
+                  key={index}
+                  icon={getIcon(index)}
+                  label={stat.label}
+                  value={stat.value}
+                  description={stat.description}
+                />
+              ))}
+          </div>
+        )}
       </div>
     </section>
   )
